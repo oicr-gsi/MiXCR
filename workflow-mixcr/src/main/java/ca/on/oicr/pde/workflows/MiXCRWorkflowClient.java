@@ -25,8 +25,7 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
     //dir
     private String dataDir, tmpDir;
     private String outDir;
-    private String resultDir;
-
+   
     // Input Data
     private String read1Fastq;
     private String read2Fastq;
