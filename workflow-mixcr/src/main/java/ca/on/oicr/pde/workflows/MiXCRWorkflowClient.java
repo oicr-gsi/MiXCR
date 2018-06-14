@@ -57,18 +57,18 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
     private static final Logger logger = Logger.getLogger(MiXCRWorkflowClient.class.getName());
     private String queue;
     private Map<String, SqwFile> tempFiles;
-
+    
     // meta-types
     private final static String TXT_METATYPE = "text/plain";
     private final static String TAR_GZ_METATYPE = "application/tar-gzip";
+    private static final String FASTQ_GZIP_MIMETYPE = "chemical/seq-na-fastq-gzip";
 
     private void init() {
         try {
             //dir
             dataDir = "data";
             tmpDir = getProperty("tmp_dir");
-            resultDir = getProperty("results")
-
+            
             // input samples 
               // input samples 
             read1Fastq = getProperty("input_read1_fastq");
@@ -108,13 +108,13 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
 
     @Override
     public Map<String, SqwFile> setupFiles() {
-        SqwFile file0 = this.createFile("tumor");
-        file0.setSourcePath(tumorBam);
-        file0.setType("application/bam");
+        SqwFile file0 = this.createFile("read1");
+        file0.setSourcePath(read1Fastq);
+        file0.setType(TXT_METATYPE);
         file0.setIsInput(true);
-        SqwFile file1 = this.createFile("normal");
-        file1.setSourcePath(normalBam);
-        file1.setType("application/bam");
+        SqwFile file1 = this.createFile("read2");
+        file1.setSourcePath(read1Fastq);
+        file1.setType(TXT_METATYPE);
         file1.setIsInput(true);
         return this.getFiles();
     }
@@ -141,13 +141,12 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
         // run sequenzaR; handle output; provision files (3) -- model-fit.zip; text/plain; text/plain
         
         Job parentJob = null;
-        this.outDir = this.outputFilenamePrefix + "_output";
-        this.alignvdjcaFile = this.resultDir +  this.outputFilenamePrefix + ".alignments.vdjca";
-        this.alignrescued1File = this.resultDir + this.outputFilenamePrefix + ".alignments_rescued_1.vdjca";
-        this.alignrescued2File = this.resultDir + this.outputFilenamePrefix + ".alignments_rescued_2.vdjcal";
-        this.alignrescued2extendFile = this.resultDir + this.outputFilenamePrefix + ".alignments_rescued_2_extended.vdjca";
-        this.cloneClnsFile = this.resultDir + this.outputFilenamePrefix + "clones.clsn";
-        this.cloneDetTxtFile = this.resultDir + this.outputFilenamePrefix + "clones.det.txt";
+                this.alignvdjcaFile = this.dataDir+  this.outputFilenamePrefix + ".alignments.vdjca";
+        this.alignrescued1File = this.dataDir + this.outputFilenamePrefix + ".alignments_rescued_1.vdjca";
+        this.alignrescued2File = this.dataDir + this.outputFilenamePrefix + ".alignments_rescued_2.vdjcal";
+        this.alignrescued2extendFile = this.dataDir + this.outputFilenamePrefix + ".alignments_rescued_2_extended.vdjca";
+        this.cloneClnsFile = this.dataDir + this.outputFilenamePrefix + "clones.clns";
+        this.cloneDetTxtFile = this.dataDir + this.outputFilenamePrefix + "clones.det.txt";
         
 
         Job VDJCgenes = alignVDJCgenes();
@@ -177,12 +176,12 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
         String clonesFile = this.outputFilenamePrefix + ".clones.clns";
         SqwFile clnsFile = createOutputFile(this.outDir + "/" + clonesFile, TXT_METATYPE, this.manualOutput);
         clnsFile.getAnnotations().put("clone data from the tool ", "Sequenza ");
-        zipOutput.addFile(clnsFile);
+        ExportClones.addFile(clnsFile);
 
         String cloneTableFile = this.outputFilenamePrefix + ".varscanSomatic_confints_CP.txt";
         SqwFile txtFile= createOutputFile(this.outDir + "/" + cloneTableFile, TXT_METATYPE, this.manualOutput);
         txtFile.getAnnotations().put("clone data in table format", "Sequenza ");
-        zipOutput.addFile(txtFile);
+        ExportClones.addFile(txtFile);
        
     }
 
@@ -190,6 +189,7 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
     private Job alignVDJCgenes() {
         Job VDJCgenes = getWorkflow().createBashJob("VDJCgenes");
         Command cmd = VDJCgenes.getCommand();
+        cmd.addArgument("module load java/1.8.0_91" + ";");
         cmd.addArgument(this.Mixcr);
         cmd.addArgument("align -p rna-seq -s hsa --OallowPartialAlignments=true");
         cmd.addArgument(this.read1Fastq);
@@ -204,6 +204,7 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
       private Job contigAssembly1() {
         Job Assembly1 = getWorkflow().createBashJob("Assembly1");
         Command cmd = Assembly1.getCommand();
+        cmd.addArgument("module load java/1.8.0_91" + ";");
         cmd.addArgument(this.Mixcr);
         cmd.addArgument("assemblePartial");
         cmd.addArgument(this.alignvdjcaFile);
@@ -217,6 +218,7 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
       private Job contigAssembly2() {
         Job Assembly2 = getWorkflow().createBashJob("Assembly2");
         Command cmd = Assembly2.getCommand();
+        cmd.addArgument("module load java/1.8.0_91" + ";");
         cmd.addArgument(this.Mixcr);
         cmd.addArgument("assemblePartial");
         cmd.addArgument(this.alignrescued1File);
@@ -230,6 +232,7 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
       private Job extendAlignment() {
         Job Extend = getWorkflow().createBashJob("Extend");
         Command cmd = Extend.getCommand();
+        cmd.addArgument("module load java/1.8.0_91" + ";");
         cmd.addArgument(this.Mixcr);
         cmd.addArgument("extendAlignments");
         cmd.addArgument(this.alignrescued2File);
@@ -243,6 +246,7 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
      private Job assembleClonotypes() {
         Job AssembleClones = getWorkflow().createBashJob("AssembleClones");
         Command cmd = AssembleClones.getCommand();
+        cmd.addArgument("module load java/1.8.0_91" + ";");
         cmd.addArgument(this.Mixcr);
         cmd.addArgument("assemble");
         cmd.addArgument(this.alignrescued2extendFile);
@@ -255,6 +259,7 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
      private Job exportClonotypes() {
         Job ExportClones = getWorkflow().createBashJob("ExportClones");
         Command cmd = ExportClones.getCommand();
+        cmd.addArgument("module load java/1.8.0_91" + ";");
         cmd.addArgument(this.Mixcr);
         cmd.addArgument("exportClones");
         cmd.addArgument(this.cloneClnsFile);
