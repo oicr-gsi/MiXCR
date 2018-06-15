@@ -79,11 +79,11 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
             //MiXCR
             Mixcr = getProperty("MIXCR");
             
-             manualOutput = Boolean.parseBoolean(getProperty("manual_output"));
+            manualOutput = Boolean.parseBoolean(getProperty("manual_output"));
             queue = getOptionalProperty("queue", "");
 
-            // starfusion
-                mixcrMem = Integer.parseInt(getProperty("mixcr_mem"));
+            // mixcr
+            mixcrMem = Integer.parseInt(getProperty("mixcr_mem"));
    
 
 
@@ -174,12 +174,12 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
         // Provision clones.clns, clones.det.txt{{}}
         String clonesFile = this.outputFilenamePrefix + ".clones.clns";
         SqwFile clnsFile = createOutputFile(this.outDir + "/" + clonesFile, TXT_METATYPE, this.manualOutput);
-        clnsFile.getAnnotations().put("clone data from the tool ", "Sequenza ");
+        clnsFile.getAnnotations().put("clone data from the tool ", "MiXCR ");
         ExportClones.addFile(clnsFile);
 
         String cloneTableFile = this.outputFilenamePrefix + ".varscanSomatic_confints_CP.txt";
         SqwFile txtFile= createOutputFile(this.outDir + "/" + cloneTableFile, TXT_METATYPE, this.manualOutput);
-        txtFile.getAnnotations().put("clone data in table format", "Sequenza ");
+        txtFile.getAnnotations().put("clone data in table format", "MiXCR ");
         ExportClones.addFile(txtFile);
        
     }
