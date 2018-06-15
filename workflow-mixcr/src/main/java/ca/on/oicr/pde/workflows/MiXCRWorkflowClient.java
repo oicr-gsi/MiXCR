@@ -112,7 +112,7 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
         file0.setType(TXT_METATYPE);
         file0.setIsInput(true);
         SqwFile file1 = this.createFile("read2");
-        file1.setSourcePath(read1Fastq);
+        file1.setSourcePath(read2Fastq);
         file1.setType(TXT_METATYPE);
         file1.setIsInput(true);
         return this.getFiles();
@@ -191,8 +191,8 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
         cmd.addArgument("module load java/1.8.0_91" + ";");
         cmd.addArgument(this.Mixcr);
         cmd.addArgument("align -p rna-seq -s hsa -OallowPartialAlignments=true");
-        cmd.addArgument(this.read1Fastq);
-        cmd.addArgument(this.read2Fastq);
+        cmd.addArgument(getFiles().get("read1").getProvisionedPath());
+        cmd.addArgument(getFiles().get("read2").getProvisionedPath());
         cmd.addArgument(this.alignvdjcaFile);
         VDJCgenes.setMaxMemory(Integer.toString(mixcrMem * 1024));
         VDJCgenes.setQueue(getOptionalProperty("queue", ""));
