@@ -140,7 +140,7 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
         // run sequenzaR; handle output; provision files (3) -- model-fit.zip; text/plain; text/plain
         
         Job parentJob = null;
-        this.alignvdjcaFile = this.dataDir+  this.outputFilenamePrefix + ".alignments.vdjca";
+        this.alignvdjcaFile =this.dataDir+  this.outputFilenamePrefix + ".alignments.vdjca";
         this.alignrescued1File = this.dataDir + this.outputFilenamePrefix + ".alignments_rescued_1.vdjca";
         this.alignrescued2File = this.dataDir + this.outputFilenamePrefix + ".alignments_rescued_2.vdjca";
         this.alignrescued2extendFile = this.dataDir + this.outputFilenamePrefix + ".alignments_rescued_2_extended.vdjca";
