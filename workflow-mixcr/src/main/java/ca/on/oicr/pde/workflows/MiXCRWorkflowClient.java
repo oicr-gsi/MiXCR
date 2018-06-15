@@ -190,7 +190,7 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
         Command cmd = VDJCgenes.getCommand();
         cmd.addArgument("module load java/1.8.0_91" + ";");
         cmd.addArgument(this.Mixcr);
-        cmd.addArgument("align -p rna-seq -s hsa --OallowPartialAlignments=true");
+        cmd.addArgument("align -p rna-seq -s hsa -OallowPartialAlignments=true");
         cmd.addArgument(this.read1Fastq);
         cmd.addArgument(this.read2Fastq);
         cmd.addArgument(this.alignvdjcaFile);
