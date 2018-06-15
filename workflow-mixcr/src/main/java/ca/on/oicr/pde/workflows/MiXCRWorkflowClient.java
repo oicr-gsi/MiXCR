@@ -59,8 +59,8 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
     
     // meta-types
     private final static String TXT_METATYPE = "text/plain";
-    private final static String TAR_GZ_METATYPE = "application/tar-gzip";
-    private static final String FASTQ_GZIP_MIMETYPE = "chemical/seq-na-fastq-gzip";
+   // private final static String TAR_GZ_METATYPE = "application/tar-gzip";
+   // private static final String FASTQ_GZIP_MIMETYPE = "chemical/seq-na-fastq-gzip";
 
     private void init() {
         try {
@@ -144,8 +144,8 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
         this.alignrescued1File = this.dataDir + this.outputFilenamePrefix + ".alignments_rescued_1.vdjca";
         this.alignrescued2File = this.dataDir + this.outputFilenamePrefix + ".alignments_rescued_2.vdjca";
         this.alignrescued2extendFile = this.dataDir + this.outputFilenamePrefix + ".alignments_rescued_2_extended.vdjca";
-        this.cloneClnsFile = this.dataDir + this.outputFilenamePrefix + "clones.clns";
-        this.cloneDetTxtFile = this.dataDir + this.outputFilenamePrefix + "clones.det.txt";
+        this.cloneClnsFile = this.dataDir + this.outputFilenamePrefix + ".clones.clns";
+        this.cloneDetTxtFile = this.dataDir + this.outputFilenamePrefix + ".clones.det.txt";
         
 
         Job VDJCgenes = alignVDJCgenes();
@@ -172,18 +172,19 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
         ExportClones.addParent(parentJob);
 
         // Provision clones.clns, clones.det.txt{{}}
-        String clonesFile = this.outputFilenamePrefix + ".clones.clns";
-        SqwFile clnsFile = createOutputFile(this.outDir + "/" + clonesFile, TXT_METATYPE, this.manualOutput);
-        clnsFile.getAnnotations().put("clone data from the tool ", "MiXCR ");
+        String clonesFile = this.tmpDir + ".clones.clns";
+        SqwFile clnsFile = createOutputFile(clonesFile, TXT_METATYPE, this.manualOutput);
+        clnsFile.getAnnotations().put("MiXCR_clones_clns", "MiXCR");
         ExportClones.addFile(clnsFile);
-
-        String cloneTableFile = this.outputFilenamePrefix + ".varscanSomatic_confints_CP.txt";
-        SqwFile txtFile= createOutputFile(this.outDir + "/" + cloneTableFile, TXT_METATYPE, this.manualOutput);
-        txtFile.getAnnotations().put("clone data in table format", "MiXCR ");
-        ExportClones.addFile(txtFile);
-       
+        
+        String cloneTableFile = this.tmpDir + ".clones.det.txt";
+        SqwFile txtFile = createOutputFile(cloneTableFile, TXT_METATYPE, this.manualOutput);
+        txtFile.getAnnotations().put("MiXCR_clones_det_txt", "MiXCR");
+        ExportClones.addFile(txtFile);  
+    
     }
-
+    
+    
     
     private Job alignVDJCgenes() {
         Job VDJCgenes = getWorkflow().createBashJob("VDJCgenes");
