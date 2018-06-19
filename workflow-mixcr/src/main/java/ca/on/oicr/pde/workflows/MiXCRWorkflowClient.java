@@ -14,7 +14,7 @@ import net.sourceforge.seqware.pipeline.workflowV2.model.SqwFile;
  * Java Workflows</a>.</p>
  *
  * Quick reference for the order of methods called: 1. setupDirectory 2.
- * setupFiles 3. setupWorkflow 4. setupEnvironment 5. buildWorkflow
+ * setupFiles 3. setupWorkflow 4. setupvironment 5. buildWorkflow
  *
  * See the SeqWare API for
  * <a href="http://seqware.github.io/javadoc/stable/apidocs/net/sourceforge/seqware/pipeline/workflowV2/AbstractWorkflowDataModel.html#setupDirectory%28%29">AbstractWorkflowDataModel</a>
@@ -39,9 +39,11 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
     private String cloneClnsFile;
     private String cloneDetTxtFile;
     
+    private String exports;
+    
     
     //Tools
-    private String Mixcr;
+    private String mixcr;
     private String java;
 
 
@@ -78,7 +80,7 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
             outputFilenamePrefix = getProperty("external_name");
 
             //Programs
-            Mixcr = getProperty("MIXCR");
+            mixcr = getProperty("MIXCR");
             java = getProperty("JAVA");
             
             manualOutput = Boolean.parseBoolean(getProperty("manual_output"));
@@ -86,6 +88,9 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
 
             // mixcr
             mixcrMem = Integer.parseInt(getProperty("mixcr_mem"));
+            exports = "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH" + this.java + "/lib" + ";" + 
+                    "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH" + this.java + "/jre/lib/amd64/server" + ";" +
+                    "export PATH=$PATH:" + this.java + "/bin" + ";";
    
 
 
@@ -191,10 +196,8 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
     private Job alignVDJCgenes() {
         Job VDJCgenes = getWorkflow().createBashJob("VDJCgenes");
         Command cmd = VDJCgenes.getCommand();
-        cmd.addArgument("export LD_LIBRARY_PATH=" + this.java + "/lib" + ";");
-        cmd.addArgument("export LD_LIBRARY_PATH=" + this.java + "/jre/lib/amd64/server" + ";");
-        cmd.addArgument("export PATH=" + this.java + "/bin" + ";");
-        cmd.addArgument(this.Mixcr);
+        cmd.addArgument(this.exports);
+        cmd.addArgument(this.mixcr);
         cmd.addArgument("align -p rna-seq -s hsa -OallowPartialAlignments=true");
         cmd.addArgument(getFiles().get("read1").getProvisionedPath());
         cmd.addArgument(getFiles().get("read2").getProvisionedPath());
@@ -208,10 +211,8 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
       private Job contigAssembly1() {
         Job Assembly1 = getWorkflow().createBashJob("Assembly1");
         Command cmd = Assembly1.getCommand();
-        cmd.addArgument("export LD_LIBRARY_PATH=" + this.java + "/lib" + ";");
-        cmd.addArgument("export LD_LIBRARY_PATH=" + this.java + "/jre/lib/amd64/server" + ";");
-        cmd.addArgument("export PATH=" + this.java + "/bin" + ";");
-        cmd.addArgument(this.Mixcr);
+        cmd.addArgument(this.exports);
+        cmd.addArgument(this.mixcr);
         cmd.addArgument("assemblePartial");
         cmd.addArgument(this.alignvdjcaFile);
         cmd.addArgument(this.alignrescued1File);
@@ -224,10 +225,8 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
       private Job contigAssembly2() {
         Job Assembly2 = getWorkflow().createBashJob("Assembly2");
         Command cmd = Assembly2.getCommand();
-        cmd.addArgument("export LD_LIBRARY_PATH=" + this.java + "/lib" + ";");
-        cmd.addArgument("export LD_LIBRARY_PATH=" + this.java + "/jre/lib/amd64/server" + ";");
-        cmd.addArgument("export PATH=" + this.java + "/bin" + ";");
-        cmd.addArgument(this.Mixcr);
+        cmd.addArgument(this.exports);
+        cmd.addArgument(this.mixcr);
         cmd.addArgument("assemblePartial");
         cmd.addArgument(this.alignrescued1File);
         cmd.addArgument(this.alignrescued2File);
@@ -240,10 +239,8 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
       private Job extendAlignment() {
         Job Extend = getWorkflow().createBashJob("Extend");
         Command cmd = Extend.getCommand();
-        cmd.addArgument("export LD_LIBRARY_PATH=" + this.java + "/lib" + ";");
-        cmd.addArgument("export LD_LIBRARY_PATH=" + this.java + "/jre/lib/amd64/server" + ";");
-        cmd.addArgument("export PATH=" + this.java + "/bin" + ";");
-        cmd.addArgument(this.Mixcr);
+        cmd.addArgument(this.exports);
+        cmd.addArgument(this.mixcr);
         cmd.addArgument("extendAlignments");
         cmd.addArgument(this.alignrescued2File);
         cmd.addArgument(this.alignrescued2extendFile);
@@ -256,10 +253,8 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
      private Job assembleClonotypes() {
         Job AssembleClones = getWorkflow().createBashJob("AssembleClones");
         Command cmd = AssembleClones.getCommand();
-        cmd.addArgument("export LD_LIBRARY_PATH=" + this.java + "/lib" + ";");
-        cmd.addArgument("export LD_LIBRARY_PATH=" + this.java + "/jre/lib/amd64/server" + ";");
-        cmd.addArgument("export PATH=" + this.java + "/bin" + ";");
-        cmd.addArgument(this.Mixcr);
+        cmd.addArgument(this.exports);
+        cmd.addArgument(this.mixcr);
         cmd.addArgument("assemble");
         cmd.addArgument(this.alignrescued2extendFile);
         cmd.addArgument(this.cloneClnsFile);
@@ -271,10 +266,8 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
      private Job exportClonotypes() {
         Job ExportClones = getWorkflow().createBashJob("ExportClones");
         Command cmd = ExportClones.getCommand();
-        cmd.addArgument("export LD_LIBRARY_PATH=" + this.java + "/lib" + ";");
-        cmd.addArgument("export LD_LIBRARY_PATH=" + this.java + "/jre/lib/amd64/server" + ";");
-        cmd.addArgument("export PATH=" + this.java + "/bin" + ";");
-        cmd.addArgument(this.Mixcr);
+        cmd.addArgument(this.exports);
+        cmd.addArgument(this.mixcr);
         cmd.addArgument("exportClones");
         cmd.addArgument(this.cloneClnsFile);
         cmd.addArgument(this.cloneDetTxtFile);
