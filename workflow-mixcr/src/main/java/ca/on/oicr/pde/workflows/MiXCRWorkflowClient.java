@@ -169,13 +169,13 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
         ExportClones.addParent(parentJob);
 
         // Provision clones.clns, clones.det.txt{{}}
-        String clonesFile = this.tmpDir + this.outputFilenamePrefix + "clones.clns";
-        SqwFile clnsFile = createOutputFile(clonesFile, TXT_METATYPE, this.manualOutput);
+        String clonesFile = this.dataDir + this.outputFilenamePrefix + "clones.clns";
+        SqwFile clnsFile = createOutputFile(this.cloneClnsFile, TXT_METATYPE, this.manualOutput);
         clnsFile.getAnnotations().put("MiXCR_clones_clns", "MiXCR");
         ExportClones.addFile(clnsFile);
         
-        String cloneTableFile = this.tmpDir + this.outputFilenamePrefix + "clones.det.txt";
-        SqwFile txtFile = createOutputFile(cloneTableFile, TXT_METATYPE, this.manualOutput);
+        String cloneTableFile = this.dataDir + this.outputFilenamePrefix + "clones.det.txt";
+        SqwFile txtFile = createOutputFile( this.cloneDetTxtFile, TXT_METATYPE, this.manualOutput);
         txtFile.getAnnotations().put("MiXCR_clones_det_txt", "MiXCR");
         ExportClones.addFile(txtFile);  
     
