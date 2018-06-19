@@ -129,22 +129,10 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
     public void buildWorkflow() {
 
         /**
-         * Steps for sequenza: 1. Check if "bam" file exists; true 2. Check if
-         * "bai" file exists; true: go to step 4 3. Check if normal Pb_R sample
-         * exists; true: go to step 4; else abort 3. If false: samtools index
-         * "bam" file 4. Run job sequenza-utils 5. If outputFile ends with
-         * "bin50.gz"; go to step 6; else go to step 4 6. Run job sequenzaR 7.
-         * Iterate through the files/folders in outDir: 8. If fileName1 ==
-         * "pandc.txt" and fileName2 ends with "Total_CN.seg"; create a folder
-         * called "copynumber" 9. If fileType == "folder"; create a folder
-         * called "model-fit"; move folders to "model-fit" 10. If fileType ==
-         * "file" && fileName != outputFile; move file to "model-fit" 11. Delete
-         * outputFile (rm outputFile) 12. zip "model-fit" 13. outputFile =
-         * fileName2 14. OutputDir contains the following: fileName1,
-         * outputFile, model-fit.zip
+         * Steps for MiXCR
          */
         // workflow : read inputs tumor and normal bam; run sequenza-utils; write the output to temp directory; 
-        // run sequenzaR; handle output; provision files (3) -- model-fit.zip; text/plain; text/plain
+        // run sequenzaR; handle output; provision files (2) -- clones.clns; clones.det.txt
         
         Job parentJob = null;
         this.alignvdjcaFile =this.dataDir+  this.outputFilenamePrefix + ".alignments.vdjca";
