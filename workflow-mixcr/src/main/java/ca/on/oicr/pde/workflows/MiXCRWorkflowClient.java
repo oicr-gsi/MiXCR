@@ -88,8 +88,8 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
 
             // mixcr
             mixcrMem = Integer.parseInt(getProperty("mixcr_mem"));
-            exports = "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH" + this.java + "/lib" + ";" + 
-                    "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH" + this.java + "/jre/lib/amd64/server" + ";" +
+            exports = "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:" + this.java + "/lib" + ";" + 
+                    "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:" + this.java + "/jre/lib/amd64/server" + ";" +
                     "export PATH=$PATH:" + this.java + "/bin" + ";";
    
 
