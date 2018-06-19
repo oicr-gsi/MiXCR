@@ -42,6 +42,7 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
     
     //Tools
     private String Mixcr;
+    private String java;
 
 
     //Memory allocation
@@ -76,8 +77,9 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
             //Ext id
             outputFilenamePrefix = getProperty("external_name");
 
-            //MiXCR
+            //Programs
             Mixcr = getProperty("MIXCR");
+            java = getProperty("JAVA");
             
             manualOutput = Boolean.parseBoolean(getProperty("manual_output"));
             queue = getOptionalProperty("queue", "");
@@ -189,7 +191,9 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
     private Job alignVDJCgenes() {
         Job VDJCgenes = getWorkflow().createBashJob("VDJCgenes");
         Command cmd = VDJCgenes.getCommand();
-        cmd.addArgument("module load java/1.8.0_91" + ";");
+        cmd.addArgument("export LD_LIBRARY_PATH=" + this.java + "/lib" + ";");
+        cmd.addArgument("export LD_LIBRARY_PATH=" + this.java + "/jre/lib/amd64/server" + ";");
+        cmd.addArgument("export PATH=" + this.java + "/bin" + ";");
         cmd.addArgument(this.Mixcr);
         cmd.addArgument("align -p rna-seq -s hsa -OallowPartialAlignments=true");
         cmd.addArgument(getFiles().get("read1").getProvisionedPath());
@@ -204,7 +208,9 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
       private Job contigAssembly1() {
         Job Assembly1 = getWorkflow().createBashJob("Assembly1");
         Command cmd = Assembly1.getCommand();
-        cmd.addArgument("module load java/1.8.0_91" + ";");
+        cmd.addArgument("export LD_LIBRARY_PATH=" + this.java + "/lib" + ";");
+        cmd.addArgument("export LD_LIBRARY_PATH=" + this.java + "/jre/lib/amd64/server" + ";");
+        cmd.addArgument("export PATH=" + this.java + "/bin" + ";");
         cmd.addArgument(this.Mixcr);
         cmd.addArgument("assemblePartial");
         cmd.addArgument(this.alignvdjcaFile);
@@ -218,7 +224,9 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
       private Job contigAssembly2() {
         Job Assembly2 = getWorkflow().createBashJob("Assembly2");
         Command cmd = Assembly2.getCommand();
-        cmd.addArgument("module load java/1.8.0_91" + ";");
+        cmd.addArgument("export LD_LIBRARY_PATH=" + this.java + "/lib" + ";");
+        cmd.addArgument("export LD_LIBRARY_PATH=" + this.java + "/jre/lib/amd64/server" + ";");
+        cmd.addArgument("export PATH=" + this.java + "/bin" + ";");
         cmd.addArgument(this.Mixcr);
         cmd.addArgument("assemblePartial");
         cmd.addArgument(this.alignrescued1File);
@@ -232,7 +240,9 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
       private Job extendAlignment() {
         Job Extend = getWorkflow().createBashJob("Extend");
         Command cmd = Extend.getCommand();
-        cmd.addArgument("module load java/1.8.0_91" + ";");
+        cmd.addArgument("export LD_LIBRARY_PATH=" + this.java + "/lib" + ";");
+        cmd.addArgument("export LD_LIBRARY_PATH=" + this.java + "/jre/lib/amd64/server" + ";");
+        cmd.addArgument("export PATH=" + this.java + "/bin" + ";");
         cmd.addArgument(this.Mixcr);
         cmd.addArgument("extendAlignments");
         cmd.addArgument(this.alignrescued2File);
@@ -246,7 +256,9 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
      private Job assembleClonotypes() {
         Job AssembleClones = getWorkflow().createBashJob("AssembleClones");
         Command cmd = AssembleClones.getCommand();
-        cmd.addArgument("module load java/1.8.0_91" + ";");
+        cmd.addArgument("export LD_LIBRARY_PATH=" + this.java + "/lib" + ";");
+        cmd.addArgument("export LD_LIBRARY_PATH=" + this.java + "/jre/lib/amd64/server" + ";");
+        cmd.addArgument("export PATH=" + this.java + "/bin" + ";");
         cmd.addArgument(this.Mixcr);
         cmd.addArgument("assemble");
         cmd.addArgument(this.alignrescued2extendFile);
@@ -259,7 +271,9 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
      private Job exportClonotypes() {
         Job ExportClones = getWorkflow().createBashJob("ExportClones");
         Command cmd = ExportClones.getCommand();
-        cmd.addArgument("module load java/1.8.0_91" + ";");
+        cmd.addArgument("export LD_LIBRARY_PATH=" + this.java + "/lib" + ";");
+        cmd.addArgument("export LD_LIBRARY_PATH=" + this.java + "/jre/lib/amd64/server" + ";");
+        cmd.addArgument("export PATH=" + this.java + "/bin" + ";");
         cmd.addArgument(this.Mixcr);
         cmd.addArgument("exportClones");
         cmd.addArgument(this.cloneClnsFile);
