@@ -45,6 +45,7 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
     //Tools
     private String mixcr;
     private String java;
+    private String javahome;
 
 
     //Memory allocation
@@ -82,15 +83,16 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
             //Programs
             mixcr = getProperty("MIXCR");
             java = getProperty("JAVA");
+            javahome = getProperty("JAVA_HOME");
             
             manualOutput = Boolean.parseBoolean(getProperty("manual_output"));
             queue = getOptionalProperty("queue", "");
 
             // mixcr
             mixcrMem = Integer.parseInt(getProperty("mixcr_mem"));
-            exports = "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:" + this.java + "/lib" + ";" + 
-                    "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:" + this.java + "/jre/lib/amd64/server" + ";" +
-                    "export PATH=$PATH:" + this.java + "/bin" + ";";
+            exports = "export LD_LIBRARY_PATH=" + this.java + "/lib" + ":$LD_LIBRARY_PATH" +";" + 
+                    "export LD_LIBRARY_PATH=" + this.java + "/jre/lib/amd64/server" + ":$LD_LIBRARY_PATH" + ";" +
+                    "export PATH=" + this.java + "/bin" + ":$PATH" + ";";
    
 
 
@@ -184,6 +186,10 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
     private Job alignVDJCgenes() {
         Job VDJCgenes = getWorkflow().createBashJob("VDJCgenes");
         Command cmd = VDJCgenes.getCommand();
+        cmd.addArgument("module load java/1.8.0_91");
+        cmd.addArgument("which java");
+        cmd.addArgument("echo $javahome");
+        cmd.addArgument("echo $MODULEPATH");
         cmd.addArgument(this.exports);
         cmd.addArgument(this.mixcr);
         cmd.addArgument("align -p rna-seq -s hsa -OallowPartialAlignments=true");
