@@ -130,7 +130,7 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
         /**
          * Steps for MiXCR
          */
-        // provision files (2) -- clones.clns; clones.det.txt; both are text files
+        // provision files (2) -- clones.clns; clones.det.txt; 
         
         Job parentJob = null;
         this.alignvdjcaFile =this.dataDir+  this.outputFilenamePrefix + ".alignments.vdjca";
@@ -159,8 +159,7 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
         ExportClones.addParent(AssembleClones);
 
         // Provision clones.clns, clones.det.txt{{}}
-        // Both files provisioned are txt files
-        
+        //clones.clns is binary output file and clones.det.txt is human readable tab-delimited table text file.
         String clonesFile = this.dataDir + this.outputFilenamePrefix + "clones.clns";
         SqwFile clnsFile = createOutputFile(this.cloneClnsFile, TXT_METATYPE, this.manualOutput);
         clnsFile.getAnnotations().put("MiXCR_clones_clns", "MiXCR");
