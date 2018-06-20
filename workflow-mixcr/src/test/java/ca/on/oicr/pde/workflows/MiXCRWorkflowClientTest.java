@@ -11,7 +11,7 @@ import org.junit.Assert;
 
 /**
  *
- * @author prath
+ * @author alka
  */
 public class MiXCRWorkflowClientTest {
 

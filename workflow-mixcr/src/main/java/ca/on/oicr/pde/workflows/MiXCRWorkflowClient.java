@@ -44,7 +44,6 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
     
     //Tools
     private String mixcr;
-    private String java;
     private String javahome;
 
 
@@ -63,8 +62,6 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
     
     // meta-types
     private final static String TXT_METATYPE = "text/plain";
-   // private final static String TAR_GZ_METATYPE = "application/tar-gzip";
-   // private static final String FASTQ_GZIP_MIMETYPE = "chemical/seq-na-fastq-gzip";
 
     private void init() {
         try {
@@ -82,7 +79,6 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
 
             //Programs
             mixcr = getProperty("MIXCR");
-            java = getProperty("JAVA");
             javahome = getProperty("JAVA_HOME");
             
             manualOutput = Boolean.parseBoolean(getProperty("manual_output"));
@@ -90,9 +86,9 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
 
             // mixcr
             mixcrMem = Integer.parseInt(getProperty("mixcr_mem"));
-            exports = "export LD_LIBRARY_PATH=" + this.java + "/lib" + ":$LD_LIBRARY_PATH" +";" + 
-                    "export LD_LIBRARY_PATH=" + this.java + "/jre/lib/amd64/server" + ":$LD_LIBRARY_PATH" + ";" +
-                    "export PATH=" + this.java + "/bin" + ":$PATH" + ";";
+            exports = "export LD_LIBRARY_PATH=" + this.javahome + "/lib" + ":$LD_LIBRARY_PATH" +";" + 
+                    "export LD_LIBRARY_PATH=" + this.javahome + "/jre/lib/amd64/server" + ":$LD_LIBRARY_PATH" + ";" +
+                    "export PATH=" + this.javahome + "/bin" + ":$PATH" + ";";
    
 
 
@@ -133,8 +129,7 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
         /**
          * Steps for MiXCR
          */
-        // workflow : read inputs tumor and normal bam; run sequenza-utils; write the output to temp directory; 
-        // run sequenzaR; handle output; provision files (2) -- clones.clns; clones.det.txt
+        // provision files (2) -- clones.clns; clones.det.txt; both are text files
         
         Job parentJob = null;
         this.alignvdjcaFile =this.dataDir+  this.outputFilenamePrefix + ".alignments.vdjca";
@@ -145,14 +140,13 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
         this.cloneDetTxtFile = this.dataDir + this.outputFilenamePrefix + ".clones.det.txt";
         
 
-        Job VDJCgenes = alignVDJCgenes();
-        parentJob = VDJCgenes;
+        Job vdjcgenes = alignVDJCgenes();
+        parentJob = vdjcgenes;
 
         Job Assembly1= contigAssembly1();
         Assembly1.addParent(parentJob);
         parentJob = Assembly1;
 
-      
         Job Assembly2 = contigAssembly2();
         Assembly2.addParent(parentJob);
         parentJob = Assembly2;
@@ -184,17 +178,17 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
     
     
     private Job alignVDJCgenes() {
-        Job VDJCgenes = getWorkflow().createBashJob("VDJCgenes");
-        Command cmd = VDJCgenes.getCommand();
+        Job vdjcgenes = getWorkflow().createBashJob("VDJCgenes");
+        Command cmd = vdjcgenes.getCommand();
         cmd.addArgument(this.exports);
         cmd.addArgument(this.mixcr);
         cmd.addArgument("align -p rna-seq -s hsa -OallowPartialAlignments=true");
         cmd.addArgument(getFiles().get("read1").getProvisionedPath());
         cmd.addArgument(getFiles().get("read2").getProvisionedPath());
         cmd.addArgument(this.alignvdjcaFile);
-        VDJCgenes.setMaxMemory(Integer.toString(mixcrMem * 1024));
-        VDJCgenes.setQueue(getOptionalProperty("queue", ""));
-        return VDJCgenes;
+        vdjcgenes.setMaxMemory(Integer.toString(mixcrMem * 1024));
+        vdjcgenes.setQueue(getOptionalProperty("queue", ""));
+        return vdjcgenes;
         
     }
     
