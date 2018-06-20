@@ -62,7 +62,8 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
     
     // meta-types
     private final static String TXT_METATYPE = "text/plain";
-
+    private static final String FASTQ_GZIP_MIMETYPE = "chemical/seq-na-fastq-gzip";
+    
     private void init() {
         try {
             //dir
@@ -114,11 +115,11 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
     public Map<String, SqwFile> setupFiles() {
         SqwFile file0 = this.createFile("read1");
         file0.setSourcePath(read1Fastq);
-        file0.setType(TXT_METATYPE);
+        file0.setType(FASTQ_GZIP_MIMETYPE);
         file0.setIsInput(true);
         SqwFile file1 = this.createFile("read2");
         file1.setSourcePath(read2Fastq);
-        file1.setType(TXT_METATYPE);
+        file1.setType(FASTQ_GZIP_MIMETYPE);
         file1.setIsInput(true);
         return this.getFiles();
     }
@@ -141,28 +142,25 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
         
 
         Job vdjcgenes = alignVDJCgenes();
-        parentJob = vdjcgenes;
-
+       
         Job Assembly1= contigAssembly1();
-        Assembly1.addParent(parentJob);
-        parentJob = Assembly1;
-
+        Assembly1.addParent(vdjcgenes);
+       
         Job Assembly2 = contigAssembly2();
-        Assembly2.addParent(parentJob);
-        parentJob = Assembly2;
-
+        Assembly2.addParent(Assembly1);
+      
         Job Extend = extendAlignment();
-        Extend .addParent(parentJob);
-        parentJob = Extend ;
-
+        Extend .addParent(Assembly2);
+   
         Job AssembleClones = assembleClonotypes();
-        AssembleClones.addParent(parentJob);
-        parentJob = AssembleClones;
-
+        AssembleClones.addParent(Extend);
+        
         Job ExportClones = exportClonotypes();
-        ExportClones.addParent(parentJob);
+        ExportClones.addParent(AssembleClones);
 
         // Provision clones.clns, clones.det.txt{{}}
+        // Both files provisioned are txt files
+        
         String clonesFile = this.dataDir + this.outputFilenamePrefix + "clones.clns";
         SqwFile clnsFile = createOutputFile(this.cloneClnsFile, TXT_METATYPE, this.manualOutput);
         clnsFile.getAnnotations().put("MiXCR_clones_clns", "MiXCR");
