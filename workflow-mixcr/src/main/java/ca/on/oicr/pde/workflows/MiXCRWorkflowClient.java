@@ -186,10 +186,6 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
     private Job alignVDJCgenes() {
         Job VDJCgenes = getWorkflow().createBashJob("VDJCgenes");
         Command cmd = VDJCgenes.getCommand();
-        cmd.addArgument("module load java/1.8.0_91");    
-        cmd.addArgument("which java");
-        cmd.addArgument("echo $javahome");
-        cmd.addArgument("echo $MODULEPATH");
         cmd.addArgument(this.exports);
         cmd.addArgument(this.mixcr);
         cmd.addArgument("align -p rna-seq -s hsa -OallowPartialAlignments=true");
