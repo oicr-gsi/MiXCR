@@ -185,7 +185,7 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
         cmd.addArgument(getFiles().get("read2").getProvisionedPath());
         cmd.addArgument(this.alignvdjcaFile);
         vdjcgenes.setMaxMemory(Integer.toString(mixcrMem * 1024));
-        vdjcgenes.setQueue(getOptionalProperty("queue", ""));
+        vdjcgenes.setQueue(queue);
         return vdjcgenes;
         
     }
@@ -199,7 +199,7 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
         cmd.addArgument(this.alignvdjcaFile);
         cmd.addArgument(this.alignrescued1File);
         Assembly1.setMaxMemory(Integer.toString(mixcrMem * 1024));
-        Assembly1.setQueue(getOptionalProperty("queue", ""));
+        Assembly1.setQueue(queue);
         return Assembly1;
     }
     
@@ -213,7 +213,7 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
         cmd.addArgument(this.alignrescued1File);
         cmd.addArgument(this.alignrescued2File);
         Assembly2.setMaxMemory(Integer.toString(mixcrMem * 1024));
-        Assembly2.setQueue(getOptionalProperty("queue", ""));
+        Assembly2.setQueue(queue);
         return Assembly2;
     }
     
@@ -227,7 +227,7 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
         cmd.addArgument(this.alignrescued2File);
         cmd.addArgument(this.alignrescued2extendFile);
         Extend.setMaxMemory(Integer.toString(mixcrMem * 1024));
-        Extend.setQueue(getOptionalProperty("queue", ""));
+        Extend.setQueue(queue);
         return Extend;
     }   
       
@@ -241,7 +241,7 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
         cmd.addArgument(this.alignrescued2extendFile);
         cmd.addArgument(this.cloneClnsFile);
         AssembleClones.setMaxMemory(Integer.toString(mixcrMem * 1024));
-       AssembleClones.setQueue(getOptionalProperty("queue", ""));
+        AssembleClones.setQueue(queue);
         return AssembleClones;
     }   
      
@@ -254,7 +254,7 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
         cmd.addArgument(this.cloneClnsFile);
         cmd.addArgument(this.cloneDetTxtFile);
         ExportClones.setMaxMemory(Integer.toString(mixcrMem * 1024));
-        ExportClones.setQueue(getOptionalProperty("queue", ""));
+        ExportClones.setQueue(queue);
         return ExportClones;
     }   
        
