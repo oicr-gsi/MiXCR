@@ -143,39 +143,39 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
 
         Job vdjcgenes = alignVDJCgenes();
        
-        Job Assembly1= contigAssembly1();
-        Assembly1.addParent(vdjcgenes);
+        Job assembly1= contigAssembly1();
+        assembly1.addParent(vdjcgenes);
        
-        Job Assembly2 = contigAssembly2();
-        Assembly2.addParent(Assembly1);
+        Job assembly2 = contigAssembly2();
+        assembly2.addParent(assembly1);
       
-        Job Extend = extendAlignment();
-        Extend .addParent(Assembly2);
+        Job extend = extendAlignment();
+        extend.addParent(assembly2);
    
-        Job AssembleClones = assembleClonotypes();
-        AssembleClones.addParent(Extend);
+        Job assembleClones = assembleClonotypes();
+        assembleClones.addParent(extend);
         
-        Job ExportClones = exportClonotypes();
-        ExportClones.addParent(AssembleClones);
+        Job exportClones = exportClonotypes();
+        exportClones.addParent(assembleClones);
 
         // Provision clones.clns, clones.det.txt{{}}
         //clones.clns is binary output file and clones.det.txt is human readable tab-delimited table text file.
         String clonesFile = this.dataDir + this.outputFilenamePrefix + "clones.clns";
         SqwFile clnsFile = createOutputFile(this.cloneClnsFile, TXT_METATYPE, this.manualOutput);
         clnsFile.getAnnotations().put("MiXCR_clones_clns", "MiXCR");
-        ExportClones.addFile(clnsFile);
+        exportClones.addFile(clnsFile);
         
         String cloneTableFile = this.dataDir + this.outputFilenamePrefix + "clones.det.txt";
         SqwFile txtFile = createOutputFile( this.cloneDetTxtFile, TXT_METATYPE, this.manualOutput);
         txtFile.getAnnotations().put("MiXCR_clones_det_txt", "MiXCR");
-        ExportClones.addFile(txtFile);  
+        exportClones.addFile(txtFile);  
     
     }
     
     
     
     private Job alignVDJCgenes() {
-        Job vdjcgenes = getWorkflow().createBashJob("VDJCgenes");
+        Job vdjcgenes = getWorkflow().createBashJob("vdjcgenes");
         Command cmd = vdjcgenes.getCommand();
         cmd.addArgument(this.exports);
         cmd.addArgument(this.mixcr);
@@ -190,71 +190,71 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
     }
     
       private Job contigAssembly1() {
-        Job Assembly1 = getWorkflow().createBashJob("Assembly1");
-        Command cmd = Assembly1.getCommand();
+        Job assembly1 = getWorkflow().createBashJob("assembly1");
+        Command cmd = assembly1.getCommand();
         cmd.addArgument(this.exports);
         cmd.addArgument(this.mixcr);
         cmd.addArgument("assemblePartial");
         cmd.addArgument(this.alignvdjcaFile);
         cmd.addArgument(this.alignrescued1File);
-        Assembly1.setMaxMemory(Integer.toString(mixcrMem * 1024));
-        Assembly1.setQueue(queue);
-        return Assembly1;
+        assembly1.setMaxMemory(Integer.toString(mixcrMem * 1024));
+        assembly1.setQueue(queue);
+        return assembly1;
     }
     
       
       private Job contigAssembly2() {
-        Job Assembly2 = getWorkflow().createBashJob("Assembly2");
-        Command cmd = Assembly2.getCommand();
+        Job assembly2 = getWorkflow().createBashJob("assembly2");
+        Command cmd = assembly2.getCommand();
         cmd.addArgument(this.exports);
         cmd.addArgument(this.mixcr);
         cmd.addArgument("assemblePartial");
         cmd.addArgument(this.alignrescued1File);
         cmd.addArgument(this.alignrescued2File);
-        Assembly2.setMaxMemory(Integer.toString(mixcrMem * 1024));
-        Assembly2.setQueue(queue);
-        return Assembly2;
+        assembly2.setMaxMemory(Integer.toString(mixcrMem * 1024));
+        assembly2.setQueue(queue);
+        return assembly2;
     }
     
       
       private Job extendAlignment() {
-        Job Extend = getWorkflow().createBashJob("Extend");
-        Command cmd = Extend.getCommand();
+        Job extend = getWorkflow().createBashJob("extend");
+        Command cmd = extend.getCommand();
         cmd.addArgument(this.exports);
         cmd.addArgument(this.mixcr);
         cmd.addArgument("extendAlignments");
         cmd.addArgument(this.alignrescued2File);
         cmd.addArgument(this.alignrescued2extendFile);
-        Extend.setMaxMemory(Integer.toString(mixcrMem * 1024));
-        Extend.setQueue(queue);
-        return Extend;
+        extend.setMaxMemory(Integer.toString(mixcrMem * 1024));
+        extend.setQueue(queue);
+        return extend;
     }   
       
       
      private Job assembleClonotypes() {
-        Job AssembleClones = getWorkflow().createBashJob("AssembleClones");
-        Command cmd = AssembleClones.getCommand();
+        Job assembleClones = getWorkflow().createBashJob("assembleClones");
+        Command cmd = assembleClones.getCommand();
         cmd.addArgument(this.exports);
         cmd.addArgument(this.mixcr);
         cmd.addArgument("assemble");
         cmd.addArgument(this.alignrescued2extendFile);
         cmd.addArgument(this.cloneClnsFile);
-        AssembleClones.setMaxMemory(Integer.toString(mixcrMem * 1024));
-        AssembleClones.setQueue(queue);
-        return AssembleClones;
+        assembleClones.setMaxMemory(Integer.toString(mixcrMem * 1024));
+        assembleClones.setQueue(queue);
+        return assembleClones;
     }   
      
      private Job exportClonotypes() {
-        Job ExportClones = getWorkflow().createBashJob("ExportClones");
-        Command cmd = ExportClones.getCommand();
+        Job exportClones = getWorkflow().createBashJob("exportClones");
+        Command cmd = exportClones.getCommand();
         cmd.addArgument(this.exports);
         cmd.addArgument(this.mixcr);
         cmd.addArgument("exportClones");
         cmd.addArgument(this.cloneClnsFile);
         cmd.addArgument(this.cloneDetTxtFile);
-        ExportClones.setMaxMemory(Integer.toString(mixcrMem * 1024));
-        ExportClones.setQueue(queue);
-        return ExportClones;
+        exportClones.setMaxMemory(Integer.toString(mixcrMem * 1024));
+        exportClones.setQueue(queue);
+        return exportClones;
     }   
        
        
