@@ -7,6 +7,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>workflow-mixcr</module>
+	<module>decider-mixcr</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
