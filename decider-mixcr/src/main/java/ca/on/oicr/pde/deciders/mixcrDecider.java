@@ -16,7 +16,6 @@ public class mixcrDecider extends OicrDecider {
 
      private String produce_transcriptome_bam = "true";
     private String RGCM = "";
-    private String additionalStarParams = "";
     private String numOfThreads = "6";
     private String mixcrMemory = "24";
     private String queue = "";
@@ -64,19 +63,13 @@ public class mixcrDecider extends OicrDecider {
             this.RGCM = OICR;
         }
 
-        //star
-        if (this.options.has("star-threads")) {
-            this.numOfThreads = options.valueOf("star-threads").toString();
-        }
-        if (this.options.has("star-aln-mem-mb")) {
-            this.mixcrMemory = options.valueOf("mixcr_mem").toString();
+        //mixcr
+        if (this.options.has("mixcr-mem")) {
+            this.mixcrMemory = options.valueOf("mixcr-mem").toString();
         }
         if (this.options.has("template-type")) {
             String templateTypeArg = this.options.valueOf("template-type").toString();
             allowedTemplateTypes = Sets.newHashSet(templateTypeArg.split(","));
-        }
-        if (this.options.has("additionalStarParams")) {
-            this.additionalStarParams = this.options.valueOf("additionalStarParams").toString();
         }
 
         ReturnValue val = super.init();
