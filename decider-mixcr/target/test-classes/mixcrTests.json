@@ -2,6 +2,9 @@
     "defaults": {
         "description": "mixcrDecider test",
         "metricsResources": "/expected_output/development/",
+        "parameters": {
+            "--parent-wf-accessions": "538766,11034,37742,942766,996126,5300868,1753095,5014942,4186700,5300924,37743"
+            },
         "iniExclusions": ["parent-accessions", "workflow_run_accession", "workflow-run-accession",
             "unique_string", "parent_accessions", "parent_accession", "input_file",
             "input_files", "workflow_bundle_dir", "output_prefix"]
