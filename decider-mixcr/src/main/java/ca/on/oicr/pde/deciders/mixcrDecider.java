@@ -10,7 +10,7 @@ import net.sourceforge.seqware.common.util.Log;
 
 /**
  *
- * @author rtahir
+ * @author abenawra@oicr.on.ca
  */
 public class mixcrDecider extends OicrDecider {
 
