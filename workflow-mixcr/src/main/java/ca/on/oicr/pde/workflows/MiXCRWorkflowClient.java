@@ -25,53 +25,49 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
     //dir
     private String dataDir, tmpDir;
     private String outDir;
-   
+
     // Input Data
     private String read1Fastq;
     private String read2Fastq;
     private String outputFilenamePrefix;
-    
-     //varscan intermediate file names
+
+    //varscan intermediate file names
     private String alignvdjcaFile;
     private String alignrescued1File;
     private String alignrescued2File;
     private String alignrescued2extendFile;
     private String cloneClnsFile;
     private String cloneDetTxtFile;
-    
+
     private String exports;
-    
-    
+
     //Tools
     private String mixcr;
     private String javahome;
 
-
     //Memory allocation
     private Integer mixcrMem;
 
-
     //path to bin
     private String bin;
-
 
     private boolean manualOutput;
     private static final Logger logger = Logger.getLogger(MiXCRWorkflowClient.class.getName());
     private String queue;
     private Map<String, SqwFile> tempFiles;
-    
+
     // meta-types
     private final static String TXT_METATYPE = "text/plain";
     private static final String FASTQ_GZIP_MIMETYPE = "chemical/seq-na-fastq-gzip";
-    
+
     private void init() {
         try {
             //dir
             dataDir = "data";
             tmpDir = getProperty("tmp_dir");
-            
+
             // input samples 
-              // input samples 
+            // input samples 
             read1Fastq = getProperty("input_read1_fastq");
             read2Fastq = getProperty("input_read2_fastq");
 
@@ -81,17 +77,15 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
             //Programs
             mixcr = getProperty("MIXCR");
             javahome = getProperty("JAVA_HOME");
-            
+
             manualOutput = Boolean.parseBoolean(getProperty("manual_output"));
             queue = getOptionalProperty("queue", "");
 
             // mixcr
             mixcrMem = Integer.parseInt(getProperty("mixcr_mem"));
-            exports = "export LD_LIBRARY_PATH=" + this.javahome + "/lib" + ":$LD_LIBRARY_PATH" +";" + 
-                    "export LD_LIBRARY_PATH=" + this.javahome + "/jre/lib/amd64/server" + ":$LD_LIBRARY_PATH" + ";" +
-                    "export PATH=" + this.javahome + "/bin" + ":$PATH" + ";";
-   
-
+            exports = "export LD_LIBRARY_PATH=" + this.javahome + "/lib" + ":$LD_LIBRARY_PATH" + ";"
+                    + "export LD_LIBRARY_PATH=" + this.javahome + "/jre/lib/amd64/server" + ":$LD_LIBRARY_PATH" + ";"
+                    + "export PATH=" + this.javahome + "/bin" + ":$PATH" + ";";
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -131,30 +125,28 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
          * Steps for MiXCR
          */
         // provision files (2) -- clones.clns; clones.det.txt; 
-        
         Job parentJob = null;
-        this.alignvdjcaFile =this.dataDir+  this.outputFilenamePrefix + ".alignments.vdjca";
+        this.alignvdjcaFile = this.dataDir + this.outputFilenamePrefix + ".alignments.vdjca";
         this.alignrescued1File = this.dataDir + this.outputFilenamePrefix + ".alignments_rescued_1.vdjca";
         this.alignrescued2File = this.dataDir + this.outputFilenamePrefix + ".alignments_rescued_2.vdjca";
         this.alignrescued2extendFile = this.dataDir + this.outputFilenamePrefix + ".alignments_rescued_2_extended.vdjca";
         this.cloneClnsFile = this.dataDir + this.outputFilenamePrefix + ".clones.clns";
         this.cloneDetTxtFile = this.dataDir + this.outputFilenamePrefix + ".clones.det.txt";
-        
 
         Job vdjcgenes = alignVDJCgenes();
-       
-        Job assembly1= contigAssembly1();
+
+        Job assembly1 = contigAssembly1();
         assembly1.addParent(vdjcgenes);
-       
+
         Job assembly2 = contigAssembly2();
         assembly2.addParent(assembly1);
-      
+
         Job extend = extendAlignment();
         extend.addParent(assembly2);
-   
+
         Job assembleClones = assembleClonotypes();
         assembleClones.addParent(extend);
-        
+
         Job exportClones = exportClonotypes();
         exportClones.addParent(assembleClones);
 
@@ -164,16 +156,14 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
         SqwFile clnsFile = createOutputFile(this.cloneClnsFile, TXT_METATYPE, this.manualOutput);
         clnsFile.getAnnotations().put("MiXCR_clones_clns", "MiXCR");
         exportClones.addFile(clnsFile);
-        
+
         String cloneTableFile = this.dataDir + this.outputFilenamePrefix + "clones.det.txt";
-        SqwFile txtFile = createOutputFile( this.cloneDetTxtFile, TXT_METATYPE, this.manualOutput);
+        SqwFile txtFile = createOutputFile(this.cloneDetTxtFile, TXT_METATYPE, this.manualOutput);
         txtFile.getAnnotations().put("MiXCR_clones_det_txt", "MiXCR");
-        exportClones.addFile(txtFile);  
-    
+        exportClones.addFile(txtFile);
+
     }
-    
-    
-    
+
     private Job alignVDJCgenes() {
         Job vdjcgenes = getWorkflow().createBashJob("vdjcgenes");
         Command cmd = vdjcgenes.getCommand();
@@ -186,10 +176,10 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
         vdjcgenes.setMaxMemory(Integer.toString(mixcrMem * 1024));
         vdjcgenes.setQueue(queue);
         return vdjcgenes;
-        
+
     }
-    
-      private Job contigAssembly1() {
+
+    private Job contigAssembly1() {
         Job assembly1 = getWorkflow().createBashJob("assembly1");
         Command cmd = assembly1.getCommand();
         cmd.addArgument(this.exports);
@@ -201,9 +191,8 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
         assembly1.setQueue(queue);
         return assembly1;
     }
-    
-      
-      private Job contigAssembly2() {
+
+    private Job contigAssembly2() {
         Job assembly2 = getWorkflow().createBashJob("assembly2");
         Command cmd = assembly2.getCommand();
         cmd.addArgument(this.exports);
@@ -215,9 +204,8 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
         assembly2.setQueue(queue);
         return assembly2;
     }
-    
-      
-      private Job extendAlignment() {
+
+    private Job extendAlignment() {
         Job extend = getWorkflow().createBashJob("extend");
         Command cmd = extend.getCommand();
         cmd.addArgument(this.exports);
@@ -228,10 +216,9 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
         extend.setMaxMemory(Integer.toString(mixcrMem * 1024));
         extend.setQueue(queue);
         return extend;
-    }   
-      
-      
-     private Job assembleClonotypes() {
+    }
+
+    private Job assembleClonotypes() {
         Job assembleClones = getWorkflow().createBashJob("assembleClones");
         Command cmd = assembleClones.getCommand();
         cmd.addArgument(this.exports);
@@ -242,9 +229,9 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
         assembleClones.setMaxMemory(Integer.toString(mixcrMem * 1024));
         assembleClones.setQueue(queue);
         return assembleClones;
-    }   
-     
-     private Job exportClonotypes() {
+    }
+
+    private Job exportClonotypes() {
         Job exportClones = getWorkflow().createBashJob("exportClones");
         Command cmd = exportClones.getCommand();
         cmd.addArgument(this.exports);
@@ -255,8 +242,6 @@ public class MiXCRWorkflowClient extends OicrWorkflow {
         exportClones.setMaxMemory(Integer.toString(mixcrMem * 1024));
         exportClones.setQueue(queue);
         return exportClones;
-    }   
-       
-       
-      
+    }
+
 }

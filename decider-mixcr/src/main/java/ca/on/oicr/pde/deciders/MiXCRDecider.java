@@ -12,10 +12,9 @@ import net.sourceforge.seqware.common.util.Log;
  *
  * @author abenawra@oicr.on.ca
  */
-public class mixcrDecider extends OicrDecider {
+public class MiXCRDecider extends OicrDecider {
 
-     private String produce_transcriptome_bam = "true";
-    private String RGCM = "";
+    private String produce_transcriptome_bam = "true";
     private String numOfThreads = "6";
     private String mixcrMemory = "24";
     private String queue = "";
@@ -28,22 +27,16 @@ public class mixcrDecider extends OicrDecider {
     private String input_read2_fastq;
     private ReadGroupData readGroupDataForWorkflowRun;
 
-    public mixcrDecider() {
+    public MiXCRDecider() {
         super();
         parser.accepts("ini-file", "Optional: the location of the INI file.").withRequiredArg();
 
         //star aln
-      
         parser.accepts("mixcr-mem", "Optional: MiXCR allocated memory Gb, default is 24.").withRequiredArg();
 
-        //RG parameters
-        parser.accepts("rg-library", "Optional: RG Library, (LB).").withRequiredArg();
-        parser.accepts("rg-platform", "Optional: RG Platform, default illumina.").withRequiredArg();
-        parser.accepts("rg-platform-unit", "Optional: RG Platform unit (PU).").withRequiredArg();
-        parser.accepts("rg-sample-name", "Optional: RG Sample name (SM).").withRequiredArg();
-        parser.accepts("rg-organization", "Optional: RG Organization (CM).").withRequiredArg();
+     
         parser.accepts("template-type", "Optional: limit the run to only specified template type(s) (comma separated list).").withRequiredArg();
-    
+
     }
 
     @Override
@@ -53,17 +46,7 @@ public class mixcrDecider extends OicrDecider {
         this.setHeadersToGroupBy(Arrays.asList(FindAllTheFiles.Header.IUS_SWA));
 
         //allows anything defined on the command line to override the defaults here.
-        
-
-       
-        //RG parameters populated at the end     
-        if (this.options.has("rg-organization")) {
-            this.RGCM = options.valueOf("rg-organization").toString();
-        } else {
-            this.RGCM = OICR;
-        }
-
-        //mixcr
+       //mixcr
         if (this.options.has("mixcr-mem")) {
             this.mixcrMemory = options.valueOf("mixcr-mem").toString();
         }
@@ -101,7 +84,7 @@ public class mixcrDecider extends OicrDecider {
                     break;
                 case 2:
                     if (this.input_read2_fastq != null) {
-                        Log.error("More than one file found for read 2: " + input_read2_fastq+ ", " + file);
+                        Log.error("More than one file found for read 2: " + input_read2_fastq + ", " + file);
                         return new ReturnValue(ExitStatus.INVALIDFILE);
                     }
                     this.input_read2_fastq = file;
@@ -144,11 +127,7 @@ public class mixcrDecider extends OicrDecider {
         iniFileMap.put("input_file_1", input_read1_fastq);
         iniFileMap.put("input_file_2", input_read2_fastq);
 
-
-       
         iniFileMap.put("mixcr_mem", this.mixcrMemory);
-
-
 
         return iniFileMap;
     }
@@ -157,7 +136,7 @@ public class mixcrDecider extends OicrDecider {
 
         List<String> params = new ArrayList<String>();
         params.add("--plugin");
-        params.add(mixcrDecider.class.getCanonicalName());
+        params.add(MiXCRDecider.class.getCanonicalName());
         params.add("--");
         params.addAll(Arrays.asList(args));
         System.out.println("Parameters: " + Arrays.deepToString(params.toArray()));

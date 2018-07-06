@@ -1,6 +1,6 @@
 {
     "defaults": {
-        "description": "mixcrDecider test",
+        "description": "MiXCRDecider test",
         "metricsResources": "/expected_output/development/",
         "parameters": {
             "--parent-wf-accessions": "538766,11034,37742,942766,996126,5300868,1753095,5014942,4186700,5300924,37743"
