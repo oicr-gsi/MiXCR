@@ -2,7 +2,7 @@
 <suite name="mixcrDeciderTestSuite" parallel="methods" thread-count="${runTestThreads}">
     <test name="Test1">
         <classes>
-            <parameter name="testDefinition" value="/mixcrDeciderTests.json"/>
+            <parameter name="testDefinition" value="/mixcrTests.json"/>
             <class name="ca.on.oicr.pde.testing.DeciderRunTestFactory"/>
         </classes>
     </test>
