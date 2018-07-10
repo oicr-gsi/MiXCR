@@ -19,13 +19,11 @@ public class MiXCRDecider extends OicrDecider {
     private String mixcrMemory = "24";
     private String queue = "";
 
-    private static final String OICR = "OICR";
-    private static final String ILLUMINA = "Illumina"; //If we don't have this passed as parameter, we assume Illumina
     private Set<String> allowedTemplateTypes;
 
-    private String input_read1_fastq;
-    private String input_read2_fastq;
-    private ReadGroupData readGroupDataForWorkflowRun;
+    private String read1Fastq;
+    private String read2Fastq;
+//    private ReadGroupData readGroupDataForWorkflowRun;
 
     public MiXCRDecider() {
         super();
@@ -62,8 +60,8 @@ public class MiXCRDecider extends OicrDecider {
 
     @Override
     protected ReturnValue doFinalCheck(String commaSeparatedFilePaths, String commaSeparatedParentAccessions) {
-        this.input_read1_fastq = null;
-        this.input_read2_fastq = null;
+        this.read1Fastq = null;
+        this.read2Fastq = null;
 
         String[] filePaths = commaSeparatedFilePaths.split(",");
         if (filePaths.length != 2) {
@@ -76,18 +74,18 @@ public class MiXCRDecider extends OicrDecider {
             int mate = idMate(file);
             switch (mate) {
                 case 1:
-                    if (this.input_read1_fastq != null) {
-                        Log.error("More than one file found for read 1: " + input_read1_fastq + ", " + file);
+                    if (this.read1Fastq != null) {
+                        Log.error("More than one file found for read 1: " + read1Fastq + ", " + file);
                         return new ReturnValue(ExitStatus.INVALIDFILE);
                     }
-                    this.input_read1_fastq = file;
+                    this.read1Fastq = file;
                     break;
                 case 2:
-                    if (this.input_read2_fastq != null) {
-                        Log.error("More than one file found for read 2: " + input_read2_fastq + ", " + file);
+                    if (this.read2Fastq != null) {
+                        Log.error("More than one file found for read 2: " + read2Fastq + ", " + file);
                         return new ReturnValue(ExitStatus.INVALIDFILE);
                     }
-                    this.input_read2_fastq = file;
+                    this.read2Fastq = file;
                     break;
                 default:
                     Log.error("Cannot identify " + file + " end (read 1 or 2)");
@@ -95,12 +93,12 @@ public class MiXCRDecider extends OicrDecider {
             }
         }
 
-        if (input_read1_fastq == null || input_read2_fastq == null) {
+        if (read1Fastq == null || read2Fastq == null) {
             Log.error("The Decider was not able to find both R1 and R2 fastq files for paired sequencing alignment, WON'T RUN");
             return new ReturnValue(ReturnValue.INVALIDPARAMETERS);
         }
 
-        readGroupDataForWorkflowRun = new ReadGroupData(files.get(input_read1_fastq), files.get(input_read2_fastq));
+//        readGroupDataForWorkflowRun = new ReadGroupData(files.get(read1Fastq), files.get(read2Fastq));
 
         return super.doFinalCheck(commaSeparatedFilePaths, commaSeparatedParentAccessions);
     }
@@ -124,8 +122,8 @@ public class MiXCRDecider extends OicrDecider {
         Log.debug("INI FILE:" + commaSeparatedFilePaths);
 
         Map<String, String> iniFileMap = super.modifyIniFile(commaSeparatedFilePaths, commaSeparatedParentAccessions);
-        iniFileMap.put("input_file_1", input_read1_fastq);
-        iniFileMap.put("input_file_2", input_read2_fastq);
+        iniFileMap.put("input_file_1", read1Fastq);
+        iniFileMap.put("input_file_2", read2Fastq);
 
         iniFileMap.put("mixcr_mem", this.mixcrMemory);
 
