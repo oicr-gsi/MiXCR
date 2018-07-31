@@ -25,6 +25,7 @@ public class MiXCRDecider extends OicrDecider {
 
     private String input_read1_fastq;
     private String input_read2_fastq;
+    private String external_name;
     private ReadGroupData readGroupDataForWorkflowRun;
 
     public MiXCRDecider() {
@@ -124,10 +125,11 @@ public class MiXCRDecider extends OicrDecider {
         Log.debug("INI FILE:" + commaSeparatedFilePaths);
 
         Map<String, String> iniFileMap = super.modifyIniFile(commaSeparatedFilePaths, commaSeparatedParentAccessions);
-        iniFileMap.put("input_file_1", input_read1_fastq);
-        iniFileMap.put("input_file_2", input_read2_fastq);
+        iniFileMap.put("input_file_1", this.input_read1_fastq);
+        iniFileMap.put("input_file_2", this.input_read2_fastq);
 
         iniFileMap.put("mixcr_mem", this.mixcrMemory);
+        iniFileMap.put("external_name", this.external_name);
 
         return iniFileMap;
     }
