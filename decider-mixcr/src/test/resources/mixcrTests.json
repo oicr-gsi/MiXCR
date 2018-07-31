@@ -11,16 +11,10 @@
     },
     "tests": [
         {
-            "id": "General study test 1",
+            "id": "TGL17_Study",
             "parameters": {
-                "--study-name": "TGL17", 
+                "--study-name": "TGL17",
                 "--template-type": "WT"
-            }
-        },
-        {
-            "id": "General sample test 1",
-            "parameters": {
-                "--root-sample-name": "TGL17_0002"
             }
         }
     ]
