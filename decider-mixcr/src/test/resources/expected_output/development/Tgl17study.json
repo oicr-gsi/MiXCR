@@ -12,6 +12,7 @@
   "totalInputFiles" : 14,
   "workflowRuns" : [ {
     "workflowIni" : {
+      "external_name" : "null",
       "input_file_1" : "/.mounts/labs/TGL/production2/seqware-results/CASAVA_2.9.1/73283513/SWID_11819302_TGL17_0001_Co_P_PE_283_WT_180413_180416_NB551051_0059_AHLJF2BGX5_GATCAG_L001_R1_001.fastq.gz",
       "input_file_2" : "/.mounts/labs/TGL/production2/seqware-results/CASAVA_2.9.1/73283513/SWID_11819302_TGL17_0001_Co_P_PE_283_WT_180413_180416_NB551051_0059_AHLJF2BGX5_GATCAG_L001_R2_001.fastq.gz",
       "java_home" : "/.mounts/labs/PDE/Modules/sw/jvm/jdk1.8.0_91",
@@ -95,6 +96,7 @@
     } ]
   }, {
     "workflowIni" : {
+      "external_name" : "null",
       "input_file_1" : "/.mounts/labs/TGL/production2/seqware-results/CASAVA_2.9.1/73283513/SWID_11819304_TGL17_0001_Lv_M_PE_300_WT_180413_180416_NB551051_0059_AHLJF2BGX5_CGTACG_L001_R1_001.fastq.gz",
       "input_file_2" : "/.mounts/labs/TGL/production2/seqware-results/CASAVA_2.9.1/73283513/SWID_11819304_TGL17_0001_Lv_M_PE_300_WT_180413_180416_NB551051_0059_AHLJF2BGX5_CGTACG_L001_R2_001.fastq.gz",
       "java_home" : "/.mounts/labs/PDE/Modules/sw/jvm/jdk1.8.0_91",
@@ -178,6 +180,7 @@
     } ]
   }, {
     "workflowIni" : {
+      "external_name" : "null",
       "input_file_1" : "/.mounts/labs/TGL/production2/seqware-results/CASAVA_2.9.1/76527020/SWID_11817457_TGL17_0001_Lv_M_PE_321_WT_180413_180413_NB551051_0058_AHLK2LBGX5_ATTCCT_L001_R1_001.fastq.gz",
       "input_file_2" : "/.mounts/labs/TGL/production2/seqware-results/CASAVA_2.9.1/76527020/SWID_11817457_TGL17_0001_Lv_M_PE_321_WT_180413_180413_NB551051_0058_AHLK2LBGX5_ATTCCT_L001_R2_001.fastq.gz",
       "java_home" : "/.mounts/labs/PDE/Modules/sw/jvm/jdk1.8.0_91",
@@ -261,6 +264,7 @@
     } ]
   }, {
     "workflowIni" : {
+      "external_name" : "null",
       "input_file_1" : "/.mounts/labs/TGL/production2/seqware-results/CASAVA_2.9.1/76527020/SWID_11817459_TGL17_0002_Lv_M_PE_313_WT_180413_180413_NB551051_0058_AHLK2LBGX5_CGATGT_L001_R1_001.fastq.gz",
       "input_file_2" : "/.mounts/labs/TGL/production2/seqware-results/CASAVA_2.9.1/76527020/SWID_11817459_TGL17_0002_Lv_M_PE_313_WT_180413_180413_NB551051_0058_AHLK2LBGX5_CGATGT_L001_R2_001.fastq.gz",
       "java_home" : "/.mounts/labs/PDE/Modules/sw/jvm/jdk1.8.0_91",
@@ -344,6 +348,7 @@
     } ]
   }, {
     "workflowIni" : {
+      "external_name" : "null",
       "input_file_1" : "/.mounts/labs/TGL/production2/seqware-results/CASAVA_2.9.1/76527020/SWID_11817461_TGL17_0003_Co_P_PE_282_WT_180413_180413_NB551051_0058_AHLK2LBGX5_TGACCA_L001_R1_001.fastq.gz",
       "input_file_2" : "/.mounts/labs/TGL/production2/seqware-results/CASAVA_2.9.1/76527020/SWID_11817461_TGL17_0003_Co_P_PE_282_WT_180413_180413_NB551051_0058_AHLK2LBGX5_TGACCA_L001_R2_001.fastq.gz",
       "java_home" : "/.mounts/labs/PDE/Modules/sw/jvm/jdk1.8.0_91",
@@ -427,6 +432,7 @@
     } ]
   }, {
     "workflowIni" : {
+      "external_name" : "null",
       "input_file_1" : "/.mounts/labs/TGL/production2/seqware-results/CASAVA_2.9.1/76527020/SWID_11817465_TGL17_0004_Lv_M_PE_310_WT_180413_180413_NB551051_0058_AHLK2LBGX5_CCGTCC_L001_R1_001.fastq.gz",
       "input_file_2" : "/.mounts/labs/TGL/production2/seqware-results/CASAVA_2.9.1/76527020/SWID_11817465_TGL17_0004_Lv_M_PE_310_WT_180413_180413_NB551051_0058_AHLK2LBGX5_CCGTCC_L001_R2_001.fastq.gz",
       "java_home" : "/.mounts/labs/PDE/Modules/sw/jvm/jdk1.8.0_91",
@@ -510,6 +516,7 @@
     } ]
   }, {
     "workflowIni" : {
+      "external_name" : "null",
       "input_file_1" : "/.mounts/labs/TGL/production2/seqware-results/CASAVA_2.9.1/76527020/SWID_11817463_TGL17_0004_Lv_M_PE_325_WT_180413_180413_NB551051_0058_AHLK2LBGX5_CAGATC_L001_R1_001.fastq.gz",
       "input_file_2" : "/.mounts/labs/TGL/production2/seqware-results/CASAVA_2.9.1/76527020/SWID_11817463_TGL17_0004_Lv_M_PE_325_WT_180413_180413_NB551051_0058_AHLK2LBGX5_CAGATC_L001_R2_001.fastq.gz",
       "java_home" : "/.mounts/labs/PDE/Modules/sw/jvm/jdk1.8.0_91",

@@ -3,6 +3,7 @@ package ca.on.oicr.pde.deciders;
 import com.google.common.collect.Sets;
 import java.util.*;
 import net.sourceforge.seqware.common.hibernate.FindAllTheFiles;
+import net.sourceforge.seqware.common.hibernate.FindAllTheFiles.Header;
 import net.sourceforge.seqware.common.module.FileMetadata;
 import net.sourceforge.seqware.common.module.ReturnValue;
 import net.sourceforge.seqware.common.module.ReturnValue.ExitStatus;
@@ -19,8 +20,7 @@ public class MiXCRDecider extends OicrDecider {
     private String mixcrMemory = "24";
     private String queue = "";
 
-    private static final String OICR = "OICR";
-    private static final String ILLUMINA = "Illumina"; //If we don't have this passed as parameter, we assume Illumina
+
     private Set<String> allowedTemplateTypes;
 
     private String input_read1_fastq;
@@ -116,6 +116,7 @@ public class MiXCRDecider extends OicrDecider {
                 return false;
             }
         }
+        this.external_name = returnValue.getAttribute(Header.SAMPLE_NAME.getTitle());
 
         return super.checkFileDetails(returnValue, fm);
     }
@@ -125,8 +126,8 @@ public class MiXCRDecider extends OicrDecider {
         Log.debug("INI FILE:" + commaSeparatedFilePaths);
 
         Map<String, String> iniFileMap = super.modifyIniFile(commaSeparatedFilePaths, commaSeparatedParentAccessions);
-        iniFileMap.put("input_file_1", this.input_read1_fastq);
-        iniFileMap.put("input_file_2", this.input_read2_fastq);
+        iniFileMap.put("input_read1_fastq", this.input_read1_fastq);
+        iniFileMap.put("input_read2_fastq", this.input_read2_fastq);
 
         iniFileMap.put("mixcr_mem", this.mixcrMemory);
         iniFileMap.put("external_name", this.external_name);
