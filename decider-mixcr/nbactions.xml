@@ -10,7 +10,7 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.2.1:exec</goal>
             </goals>
             <properties>
-                <exec.args>-classpath %classpath ${packageClassName} --study-name TGL17 --template-type WT --provenance-settings /Users/prath/.provenance/settings.json --wf-accession 5300924  --test</exec.args>
+                <exec.args>-classpath %classpath ca.on.oicr.pde.deciders.MiXCRDecider --study-name TGL17 --parent-wf-accessions 538766,11034,37742,942766,996126,5300868,1753095,5014942,4186700,5300924,37743  --template-type WT --provenance-settings /home/abenawra/.provenance/settings.json --wf-accession 12085166 --dry-run --verbose</exec.args>
                 <exec.executable>java</exec.executable>
             </properties>
         </action>
@@ -24,7 +24,7 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.2.1:exec</goal>
             </goals>
             <properties>
-                <exec.args>-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address} -classpath %classpath ${packageClassName} --study-name TGL17 --template-type WT --provenance-settings /Users/prath/.provenance/settings.json --wf-accession 5300924  --test</exec.args>
+                <exec.args>-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address} -classpath %classpath ca.on.oicr.pde.deciders.MiXCRDecider --study-name TGL17 --parent-wf-accessions 538766,11034,37742,942766,996126,5300868,1753095,5014942,4186700,5300924,37743  --template-type WT --provenance-settings /home/abenawra/.provenance/settings.json --wf-accession 12085166 --dry-run --verbose</exec.args>
                 <exec.executable>java</exec.executable>
                 <jpda.listen>true</jpda.listen>
             </properties>
@@ -39,7 +39,7 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.2.1:exec</goal>
             </goals>
             <properties>
-                <exec.args>-classpath %classpath ${packageClassName} --study-name TGL17 --template-type WT --provenance-settings /Users/prath/.provenance/settings.json --wf-accession 5300924  --test</exec.args>
+                <exec.args>-classpath %classpath ca.on.oicr.pde.deciders.MiXCRDecider --study-name TGL17 --parent-wf-accessions 538766,11034,37742,942766,996126,5300868,1753095,5014942,4186700,5300924,37743  --template-type WT --provenance-settings /home/abenawra/.provenance/settings.json --wf-accession 12085166 --dry-run --verbose</exec.args>
                 <exec.executable>java</exec.executable>
             </properties>
         </action>
